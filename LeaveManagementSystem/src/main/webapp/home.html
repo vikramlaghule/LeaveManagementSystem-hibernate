@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Leave Management System</h1>
+        <div class="user-info">
+            <h2>Welcome, <span id="username"></span>!</h2>
+            <div id="success-message" class="success-message"></div>
+            <button onclick="logout()">Logout</button>
+        </div>
+        
+        <div class="leave-balance">
+            <h3>Leave Balance</h3>
+            <div id="leave-status">Loading...</div>
+        </div>
+        
+        <div class="links">
+            <a href="apply-leave.html" class="button">Apply for Leave</a>
+        </div>
+        
+        <div class="leave-history" id="leave-history">
+            <h3>Leave History</h3>
+            <div>Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        window.onload = function() {
+            checkLoggedIn();
+            loadLeaveData();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            
+            if (success === 'leave_applied') {
+                document.getElementById('success-message').innerText = 'Leave application submitted successfully.';
+            }
+        };
+        
+        function checkLoggedIn() {
+            // Get username from session
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'leave?action=check_session', false);
+            xhr.send();
+            
+            if (xhr.status === 200) {
+                document.getElementById('username').textContent = xhr.responseText;
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+        
+        function loadLeaveData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'leave?action=status', true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.getElementById('leave-status').innerHTML = xhr.responseText;
+                } else {
+                    window.location.href = 'login.html';
+                }
+            };
+            
+            xhr.onerror = function() {
+                console.error('Error loading leave data');
+            };
+            
+            xhr.send();
+        }
+        
+        function logout() {
+            // Redirect to login page
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

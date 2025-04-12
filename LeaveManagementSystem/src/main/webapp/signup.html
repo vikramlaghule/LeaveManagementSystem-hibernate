@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Leave Management System</h1>
+        <div class="form-container">
+            <h2>Sign Up</h2>
+            <div id="error-message" class="error-message"></div>
+            <form id="signupForm" action="signup" method="post" onsubmit="return validateSignup()">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select id="department" name="department" required>
+                        <option value="">Select Department</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Operations">Operations</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Sign Up</button>
+                </div>
+                <div class="form-group">
+                    <p>Already have an account? <a href="login.html">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check for URL parameters on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            
+            if (error === 'email') {
+                document.getElementById('error-message').innerText = 'Email already exists.';
+            } else if (error === 'username') {
+                document.getElementById('error-message').innerText = 'Username already exists.';
+            } else if (error === 'server') {
+                document.getElementById('error-message').innerText = 'Server error. Please try again.';
+            }
+        };
+
+        function validateSignup() {
+            const password = document.querySelector('#signupForm input[name="password"]').value;
+            if (password.length < 6) {
+                document.getElementById('error-message').innerText = 'Password must be at least 6 characters long';
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

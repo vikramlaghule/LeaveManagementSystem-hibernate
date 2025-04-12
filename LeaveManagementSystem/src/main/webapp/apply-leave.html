@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Leave - Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Leave Management System</h1>
+        <div class="user-info">
+            <h2>Apply for Leave</h2>
+            <div id="error-message" class="error-message"></div>
+            <a href="home.html" class="button">Back to Home</a>
+        </div>
+        
+        <div class="form-container">
+            <form id="leaveForm" action="leave" method="post">
+                <div class="form-group">
+                    <label for="leaveType">Leave Type</label>
+                    <select id="leaveType" name="leaveType" required>
+                        <option value="">Select Leave Type</option>
+                        <option value="paid">Paid Leave</option>
+                        <option value="sick">Sick Leave</option>
+                        <option value="casual">Casual Leave</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="days">Number of Days</label>
+                    <input type="number" id="days" name="days" min="1" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Apply</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="leave-balance">
+            <h3>Current Leave Balance</h3>
+            <div id="leave-status">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        // Check for URL parameters on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            
+            if (error === 'invalid_days') {
+                document.getElementById('error-message').innerText = 'Invalid number of days.';
+            } else if (error === 'zero_days') {
+                document.getElementById('error-message').innerText = 'Number of days must be greater than 0.';
+            } else if (error === 'insufficient_balance') {
+                document.getElementById('error-message').innerText = 'Insufficient leave balance.';
+            } else if (error === 'server') {
+                document.getElementById('error-message').innerText = 'Server error. Please try again.';
+            }
+            
+            loadLeaveData();
+        };
+        
+        function loadLeaveData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'leave?action=status', true);
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.getElementById('leave-status').innerHTML = xhr.responseText;
+                } else {
+                    window.location.href = 'login.html';
+                }
+            };
+            
+            xhr.onerror = function() {
+                console.error('Error loading leave data');
+            };
+            
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

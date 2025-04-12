@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Leave Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Leave Management System</h1>
+        <div class="form-container">
+            <h2>Login</h2>
+            <div id="error-message" class="error-message"></div>
+            <form id="loginForm" action="login" method="post" onsubmit="return validateLogin()">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Login</button>
+                </div>
+                <div class="form-group">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check for URL parameters on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            const success = urlParams.get('success');
+            
+            if (error === 'invalid') {
+                document.getElementById('error-message').innerText = 'Invalid email or password.';
+            } else if (error === 'server') {
+                document.getElementById('error-message').innerText = 'Server error. Please try again.';
+            }
+            
+            if (success === 'registered') {
+                document.getElementById('error-message').innerText = 'Registration successful. Please login.';
+                document.getElementById('error-message').style.color = 'green';
+            }
+        };
+
+        function validateLogin() {
+            const email = document.querySelector('#loginForm input[name="email"]').value;
+            const password = document.querySelector('#loginForm input[name="password"]').value;
+            
+            if (!email.includes('@') || !email.includes('.')) {
+                document.getElementById('error-message').innerText = 'Please enter a valid email';
+                return false;
+            }
+            if (password.length < 6) {
+                document.getElementById('error-message').innerText = 'Password must be at least 6 characters long';
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
