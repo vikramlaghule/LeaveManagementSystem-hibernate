@@ -34,11 +34,11 @@ public class Main {
         context.setResources(new org.apache.catalina.webresources.StandardRoot(context));
         context.getResources().setAllowLinking(true);
         
-        // Only keep the LeaveServlet from original config
+       
         tomcat.addServlet("", "LeaveServlet", "controller.LeaveServlet");
         context.addServletMappingDecoded("/leave/*", "LeaveServlet");
         
-        // Add new separate login and signup servlets
+        
         tomcat.addServlet("", "LoginServlet", "controller.LoginServlet");
         context.addServletMappingDecoded("/login", "LoginServlet");
         
